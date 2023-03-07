@@ -1,70 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 using Npgsql;
 
 public class NetworkController : MonoBehaviour
 {
-    private static string constr = @"Server=localhost;Database=db_menu_instructor;User Id=postgres;Password=admin;";
+    [Header("Connection")]
+    [Space(5)]
+    [SerializeField] private string Server;
+    [SerializeField] private string Port;
+    [SerializeField] private string DatabaseName;
+    [SerializeField] private string UserID;
+    [SerializeField] private string Password;
 
-    private void Start()
-    {
-        Read();
+    private static string connectionString;
+    public IDataReader reader;
+    public NpgsqlConnection dbcon;
+    public IDbCommand dbcmd;
+
+    void Awake() {
+        connectionString = 
+            "Server   = " + Server + ";" +
+            "Port     = " + Port + ";" +
+            "Database = " + DatabaseName + ";" + 
+            "User ID  = " + UserID + ";" +
+            "Password = " + Password + ";";
     }
 
-    private static void Read()
-    { 
-        // for the connection to
-        // sql server database
-        NpgsqlConnection conn;
- 
-        // Data Source is the name of the
-        // server on which the database is stored.
-        // The Initial Catalog is used to specify
-        // the name of the database
-        // The UserID and Password are the credentials
-        // required to connect to the database.
- 
-        conn = new NpgsqlConnection(constr);
- 
-        // to open the connection
-        conn.Open();
- 
-        // use to perform read and write
-        // operations in the database
-        NpgsqlCommand cmd;
- 
-        // use to read a row in
-        // table one by one
-        NpgsqlDataReader dreader;
- 
-        // to store SQL command and
-        // the output of SQL command
-        string sql, output = "";
- 
-         // use to fetch rows from demo table
-        sql = "Select * from scenario";
- 
-        // to execute the sql statement
-        cmd = new NpgsqlCommand(sql, conn);
- 
-        // fetch all the rows
-        // from the demo table
-        dreader = cmd.ExecuteReader();
- 
-        // for one by one reading row
-        while (dreader.Read()) {
-            output = output + dreader.GetValue(0) + " - " +
-                                dreader.GetValue(1) + "\n";
-        }
- 
-        // to display the output
-        Debug.Log(output);
- 
-        // to close all the objects
-        dreader.Close();
-        cmd.Dispose();
-        conn.Close();
+    public IDataReader getData(string query)
+    {
+        dbcon = new NpgsqlConnection(connectionString);
+        dbcon.Open();
+        dbcmd = dbcon.CreateCommand();
+        dbcmd.CommandText = query;
+        reader = dbcmd.ExecuteReader();
+
+        return reader;
+    }
+
+    public void CloseConnection()
+    {
+        reader.Close();
+        reader = null;
+        dbcmd.Dispose();
+        dbcmd = null;
+        dbcon.Close();
+        dbcon = null;
     }
 }
