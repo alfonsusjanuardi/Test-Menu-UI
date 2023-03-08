@@ -19,7 +19,8 @@ public class VehicleController : MonoBehaviour
     [Header("UI")]
     [Space(5)]
     [SerializeField] private GameObject canvasPanel;
-    [SerializeField] private TextMeshProUGUI vehicleName;
+    [SerializeField] private TextMeshProUGUI vehicleName, vehicleDescription;
+    [SerializeField] private Image imageHeavyEquipment;
 
     [Header("List")]
     [Space(5)]
@@ -39,7 +40,7 @@ public class VehicleController : MonoBehaviour
             var meta = copy.GetComponent<Metadata>();
             var nama = vehicles[i].name;
             var desc = vehicles[i].description;
-            var sprite = Resources.Load<Sprite>("Images/" + nama + "/image");
+            var sprite = Resources.Load<Sprite>("Images/" + nama + "/" + nama);
 
             var vehicle = new VehicleInfo()
             {
@@ -65,7 +66,9 @@ public class VehicleController : MonoBehaviour
         if (canvasPanel.activeSelf == false)
                 canvasPanel.SetActive(true);
 
-        
+        vehicleName.text = vInfo.name;
+        vehicleDescription.text = vInfo.description;
+        imageHeavyEquipment.sprite = vInfo.sprite;
     }
 }
 
