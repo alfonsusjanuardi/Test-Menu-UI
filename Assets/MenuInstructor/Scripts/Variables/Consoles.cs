@@ -1,10 +1,18 @@
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
-[System.Serializable]
-public class Consoles : MonoBehaviour
+namespace ConsolesInfo
 {
-    public string consoles, vehicles;
+    [Serializable]
+    public class Consoles
+    {
+        public string name, vehicleName;
+
+        public static List<Consoles> FromJson(string json) => JsonConvert.DeserializeObject<List<Consoles>>(json);
+            public static string ToString(List<Consoles> json) => JsonConvert.SerializeObject(json, Formatting.Indented);
+    }
 }

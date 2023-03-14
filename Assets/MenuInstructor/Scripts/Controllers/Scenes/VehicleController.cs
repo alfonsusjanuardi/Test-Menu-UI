@@ -27,7 +27,7 @@ public class VehicleController : MonoBehaviour
     [Header("List")]
     [Space(5)]
     [SerializeField] private List<VehicleInfo> vehicles = new();
-    public List<Toggle> toggles;
+    [SerializeField] private List<Toggle> toggles;
     public Dictionary<string, string> consoles = new();
 
     [SerializeField] private NetworkController DBConn;
@@ -47,7 +47,8 @@ public class VehicleController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ConnectionDBVehicle();
+        bool dataPulled = ConnectionDBVehicle();
+        ConsoleController.instance.getConsoles = dataPulled ? consoles : new();
         LoadDataVehicle();
     }
 
@@ -57,7 +58,7 @@ public class VehicleController : MonoBehaviour
         
     }
 
-    private void ConnectionDBVehicle()
+    private bool ConnectionDBVehicle()
     {
         sql = "select * from console_vehicle";
         IDataReader reader = DBConn.getData(sql);
@@ -72,6 +73,11 @@ public class VehicleController : MonoBehaviour
         }
 
         DBConn.CloseConnection();
+
+        if (consoles.Count > 0)
+            return true;
+        else
+            return false;
     }
 
     private void GetInfo(VehicleInfo vInfo)
@@ -118,6 +124,11 @@ public class VehicleController : MonoBehaviour
             var button = meta.FindParamComponent<Button>("button");
             button.onClick.AddListener(delegate { GetInfo(vehicle); });
         }
+    }
+
+    public List<Toggle> GetConsoleToggles()
+    {
+        return toggles;
     }
 
     public Toggle GetConsoleToggle(string consoleName)

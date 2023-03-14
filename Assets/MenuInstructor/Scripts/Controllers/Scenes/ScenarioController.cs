@@ -10,6 +10,8 @@ using Meta.Data;
 
 public class ScenarioController : MonoBehaviour
 {
+    public static ScenarioController instance;
+
     [Header("UI GameObject")]
     [Space(5)]
     [SerializeField] private Transform parentTransform;
@@ -19,12 +21,21 @@ public class ScenarioController : MonoBehaviour
     [Space(5)]
     [SerializeField] private TextMeshProUGUI scenarioName;
     [SerializeField] private TMP_InputField taskName, time, location, information;
+    [SerializeField] private TextMeshProUGUI addLocation, editLocation;
+    [SerializeField] private TMP_InputField addScenarioName, addTaskName, addTime, addInformation;
+    [SerializeField] private TMP_InputField editScenarioName, editTaskName, editTime, editInformation;
     [SerializeField] private GameObject canvasPanel;
     
     [SerializeField] private NetworkController DBConn;
     public List<ListScenario> listScen = new();
     private string sql;
 
+    private void Awake() {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +51,11 @@ public class ScenarioController : MonoBehaviour
 
     private void LoadDataScenario()
     {
+        foreach (Transform trans in parentTransform)
+        {
+            Destroy(trans.gameObject);
+        }
+
         for (int i = 0; i < listScen.Count; i++)
         {
             var copy = Instantiate(btn, parentTransform);
@@ -77,6 +93,13 @@ public class ScenarioController : MonoBehaviour
         time.text = sInfo.time;
         location.text = sInfo.location;
         information.text = sInfo.information;
+
+        //edit scenario
+        editScenarioName.text = sInfo.scenario_name;
+        editTaskName.text = sInfo.task_name;
+        editTime.text = sInfo.time;
+        editLocation.text = sInfo.location;
+        editInformation.text = sInfo.information;
     }
 
     private void ConnectionDBScenario()
@@ -101,6 +124,86 @@ public class ScenarioController : MonoBehaviour
         }
         
         DBConn.CloseConnection();
+    }
+
+    public void addScenario()
+    {
+        ListScenario scenario = new()
+        {
+            scenario_name = addScenarioName.text,
+            task_name = addTaskName.text,
+            time = addTime.text,
+            location = addLocation.text,
+            information = addInformation.text
+        };
+        listScen.Add(scenario);
+        SetData(scenario);
+        LoadDataScenario();
+    }
+
+    private void SetData(ListScenario scenario)
+    {
+        string tabelName = "scenario";
+        List<string> columns = new()
+        {
+            "id_scenario",
+            "scenario_name",
+            "task_name",
+            "time",
+            "location",
+            "information"
+        };
+        List<List<string>> values = new()
+        {
+            new() { SetID().ToString(), "numeric" },
+            new() { scenario.scenario_name, "nonNumeric" },
+            new() { scenario.task_name, "nonNumeric"},
+            new() { scenario.time, "nonNumeric"},
+            new() { scenario.location, "nonNumeric"},
+            new() { scenario.information, "nonNumeric"}
+        };
+
+        IDataAdapter adapter = DBConn.setData(tabelName, columns, values);
+        DBConn.CloseConnection();
+    }
+
+    public void editScenario()
+    {
+        ListScenario scenario = listScen.Find(x => x.scenario_name == editScenarioName.text);
+        scenario.task_name = editTaskName.text;
+        scenario.time = editTime.text;
+        scenario.location = editLocation.text;
+        scenario.information = editInformation.text;
+
+        EditData(scenario);
+        LoadDataScenario();
+    }
+
+    private void EditData(ListScenario scenario)
+    {
+        string tabelName = "scenario";
+        List<string> columns = new()
+        {
+            "task_name",
+            "time",
+            "location",
+            "information"
+        };
+        List<List<string>> values = new()
+        {
+            new() { scenario.task_name, "nonNumeric"},
+            new() { scenario.time, "nonNumeric"},
+            new() { scenario.location, "nonNumeric"},
+            new() { scenario.information, "nonNumeric"}
+        };
+
+        IDataAdapter adapter = DBConn.editData(tabelName, columns, values, "scenario_name", scenario.scenario_name);
+        DBConn.CloseConnection();
+    }
+
+    private int SetID()
+    {
+        return listScen != null ? listScen.Count : 0;
     }
 }
 
