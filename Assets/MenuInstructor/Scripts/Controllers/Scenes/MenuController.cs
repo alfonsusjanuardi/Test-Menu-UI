@@ -16,6 +16,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject panelAddDamagePoint, panelEditDamagePoint;
     [SerializeField] private GameObject panelAddVehicleRole, panelEditVehicleRole;
     [SerializeField] private GameObject panelAddPlotLocation, panelEditPlotLocation;
+    [SerializeField] private GameObject panelAddPlotLocation1, panelAddPlotLocation2, panelAddPlotLocation3, panelAddPlotLocation4, panelAddPlotLocation5;
+    [SerializeField] private GameObject panelEditPlotLocation1, panelEditPlotLocation2, panelEditPlotLocation3, panelEditPlotLocation4, panelEditPlotLocation5;
     [SerializeField] private GameObject panelHeavyEquipment;
     [SerializeField] private GameObject panelConsoleSetting;
 
@@ -94,6 +96,11 @@ public class MenuController : MonoBehaviour
     {
         panelAddVehicleRole.SetActive(true);
         panelAddPlotLocation.SetActive(false);
+    }
+
+    public void createVehicleRole()
+    {
+        VehicleRoleController.instance.addVehicleRole();
     }
 
     public void showAddPlotLocation()

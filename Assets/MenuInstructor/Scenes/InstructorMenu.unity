@@ -2370,7 +2370,7 @@ GameObject:
   - component: {fileID: 139636429}
   - component: {fileID: 139636428}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (4)
+  m_Name: Console 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13008,7 +13008,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D A M A G E  P O I N T
+  m_text: L O C A T I O N  P L O T
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d8781e53770e33d4baab9790ff0af1c3, type: 2}
   m_sharedMaterial: {fileID: 4918140492898183931, guid: d8781e53770e33d4baab9790ff0af1c3, type: 2}
@@ -20411,7 +20411,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: D A M A G E  P O I N T
+  m_text: L O C A T I O N  P L O T
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d8781e53770e33d4baab9790ff0af1c3, type: 2}
   m_sharedMaterial: {fileID: 4918140492898183931, guid: d8781e53770e33d4baab9790ff0af1c3, type: 2}
@@ -21186,7 +21186,7 @@ GameObject:
   - component: {fileID: 1034738582}
   - component: {fileID: 1034738581}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (3)
+  m_Name: Console 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21962,6 +21962,16 @@ MonoBehaviour:
   panelEditVehicleRole: {fileID: 942793778}
   panelAddPlotLocation: {fileID: 1325343799}
   panelEditPlotLocation: {fileID: 1823240512}
+  panelAddPlotLocation1: {fileID: 0}
+  panelAddPlotLocation2: {fileID: 0}
+  panelAddPlotLocation3: {fileID: 0}
+  panelAddPlotLocation4: {fileID: 0}
+  panelAddPlotLocation5: {fileID: 0}
+  panelEditPlotLocation1: {fileID: 0}
+  panelEditPlotLocation2: {fileID: 0}
+  panelEditPlotLocation3: {fileID: 0}
+  panelEditPlotLocation4: {fileID: 0}
+  panelEditPlotLocation5: {fileID: 0}
   panelHeavyEquipment: {fileID: 1762424532}
   panelConsoleSetting: {fileID: 1307716777}
   btnBackHomeScenario: {fileID: 1985017551}
@@ -22095,6 +22105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748c49c11be7464489750f9778f49194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detailPlotAddVehicle: {fileID: 641762114}
+  detailPlotEditVehicle: {fileID: 1001203954}
+  vehiclesRole: []
   getConsoles: []
   dropdowns:
   - {fileID: 71341903315048612}
@@ -22108,6 +22121,18 @@ MonoBehaviour:
   - {fileID: 1034738581}
   - {fileID: 139636428}
   - {fileID: 1758806778}
+  buttons:
+  - {fileID: 1896485880}
+  - {fileID: 387063581}
+  - {fileID: 214050944}
+  - {fileID: 1515043971}
+  - {fileID: 1366525305}
+  buttons2:
+  - {fileID: 304631389}
+  - {fileID: 2034077974}
+  - {fileID: 780756924}
+  - {fileID: 606840831}
+  - {fileID: 932221716}
   DBConn: {fileID: 1065917687}
 --- !u!1 &1072041764
 GameObject:
@@ -26158,7 +26183,7 @@ GameObject:
   - component: {fileID: 1241323622}
   - component: {fileID: 1241323621}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (5)
+  m_Name: Console 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30436,7 +30461,7 @@ GameObject:
   - component: {fileID: 1414807751}
   - component: {fileID: 1414807750}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (1)
+  m_Name: Console 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30833,7 +30858,7 @@ GameObject:
   - component: {fileID: 1431518519}
   - component: {fileID: 1431518518}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (2)
+  m_Name: Console 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37237,7 +37262,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1742286153}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1065917689}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: createVehicleRole
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1742286153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37771,7 +37808,7 @@ GameObject:
   - component: {fileID: 1758806779}
   - component: {fileID: 1758806778}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (5)
+  m_Name: Console 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40707,7 +40744,7 @@ GameObject:
   - component: {fileID: 1851106615}
   - component: {fileID: 1851106614}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (4)
+  m_Name: Console 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42271,7 +42308,7 @@ GameObject:
   - component: {fileID: 1908436508}
   - component: {fileID: 1908436507}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (2)
+  m_Name: Console 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44050,7 +44087,7 @@ GameObject:
   - component: {fileID: 1995796545}
   - component: {fileID: 1995796544}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (3)
+  m_Name: Console 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48149,7 +48186,7 @@ GameObject:
   - component: {fileID: 71341903315048613}
   - component: {fileID: 71341903315048612}
   m_Layer: 5
-  m_Name: Dropdown Vehicle Role (1)
+  m_Name: Console 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
