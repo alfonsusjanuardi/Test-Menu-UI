@@ -7,22 +7,23 @@ using UnityEngine.UI;
 
 using TMPro;
 
-public class VehicleRoleController : MonoBehaviour
+public class ParameterController : MonoBehaviour
 {
     #region static
-    public static VehicleRoleController instance;
+    public static ParameterController instance;
     #endregion
 
     [Header("UI")]
     [Space(5)]
-    [SerializeField] private TextMeshProUGUI detailPlotAddVehicle, detailPlotEditVehicle;
+    [SerializeField] private TMP_InputField detailAddParameterVehicle, detailEditParameterVehicle;
 
     [Header("List")]
     [Space(5)]
-    [SerializeField] private List<HeavyEquipmentRole> vehiclesRole = new();
     public List<ConsoleInfo> getConsoles;
+    [SerializeField] private List<RatingParameter> vehiclesParameters = new();
     [SerializeField] private List<TMP_Dropdown> dropdowns, dropdowns2;
     [SerializeField] private List<Button> buttons, buttons2;
+
     [SerializeField] private NetworkController DBConn;
     private string sql;
 
@@ -37,18 +38,18 @@ public class VehicleRoleController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ConnectionDBVehicleRole();
-        LoadDataVehicleRole();
-        LoadDataEditVehicleRole();
+        ConnectionDBVehicleParameter();
+        LoadDataVehicleParameter();
+        LoadEditDataVehicleParameter();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    private void ConnectionDBVehicleRole()
+    private void ConnectionDBVehicleParameter()
     {
         sql = "select * from heavy_equipment_role";
         IDataReader reader = DBConn.getData(sql);
@@ -57,7 +58,7 @@ public class VehicleRoleController : MonoBehaviour
             // dropdowns[0].captionText.text = (string) reader["vehicle_name"];
             string vehicle_name = (string) reader["vehicle_name"];
 
-            vehiclesRole.Add(new HeavyEquipmentRole(){
+            vehiclesParameters.Add(new RatingParameter(){
                 vehicleName = vehicle_name
             });
         }
@@ -65,7 +66,7 @@ public class VehicleRoleController : MonoBehaviour
         DBConn.CloseConnection();
     }
 
-    private void LoadDataVehicleRole()
+    private void LoadDataVehicleParameter()
     {
         foreach (TMP_Dropdown item in dropdowns)
         {
@@ -77,17 +78,17 @@ public class VehicleRoleController : MonoBehaviour
             List<string> vehicleNames = VehicleController.instance.GetVehiclesFromConsole(getConsoles[i].name);
             GetVehicleDropdown(dropdowns[i], vehicleNames);
 
-            var vehicleName = vehiclesRole[i].vehicleName;
+            var vehicleName = vehiclesParameters[i].vehicleName;
 
-            var vehicles = new HeavyEquipmentRole(){
+            var vehicles = new RatingParameter(){
                 vehicleName = vehicleName
             };
 
-            buttons[i].onClick.AddListener(delegate{LoadDetailVehicleLocation(vehicles);});
+            buttons[i].onClick.AddListener(delegate{LoadDetailVehicleParameter(vehicles);});
         }
     }
 
-    private void LoadDataEditVehicleRole()
+    private void LoadEditDataVehicleParameter()
     {
         foreach (TMP_Dropdown item in dropdowns2)
         {
@@ -99,55 +100,22 @@ public class VehicleRoleController : MonoBehaviour
             List<string> vehicleNames = VehicleController.instance.GetVehiclesFromConsole(getConsoles[i].name);
             GetVehicleDropdown(dropdowns2[i], vehicleNames);
 
-            var vehicleName = vehiclesRole[i].vehicleName;
+            var vehicleName = vehiclesParameters[i].vehicleName;
 
-            var vehicles = new HeavyEquipmentRole(){
+            var vehicles = new RatingParameter(){
                 vehicleName = vehicleName
             };
 
-            buttons2[i].onClick.AddListener(delegate{LoadDetailVehicleLocation(vehicles);});
+            buttons2[i].onClick.AddListener(delegate{LoadDetailVehicleParameter(vehicles);});
         }
     }
 
-    public void addVehicleRole()
+    public void LoadDetailVehicleParameter(RatingParameter vehicles)
     {
-        for (int i = 0; i < getConsoles.Count; i++) {
-            HeavyEquipmentRole dataVehicle = new (){
-                consoleName = dropdowns[i].name,
-                vehicleName = dropdowns[i].captionText.text
-            };
-            vehiclesRole.Add(dataVehicle);
-            SetData(dataVehicle);
-        }
-    
-        LoadDataVehicleRole();
+        detailAddParameterVehicle.text = vehicles.vehicleName;
+        detailEditParameterVehicle.text = vehicles.vehicleName;
     }
 
-    private void SetData(HeavyEquipmentRole vehicleRole)
-    {
-        string tabelName = "heavy_equipment_role";
-        List<string> columns = new()
-        {
-            "console_name",
-            "vehicle_name"
-        };
-        List<List<string>> values = new()
-        {
-            new() { vehicleRole.consoleName, "nonNumeric" },
-            new() { vehicleRole.vehicleName, "nonNumeric" }
-        };
-
-        IDataAdapter adapter = DBConn.setData(tabelName, columns, values);
-        DBConn.CloseConnection();
-    }
-
-
-    private void LoadDetailVehicleLocation(HeavyEquipmentRole vehicles)
-    {
-        detailPlotAddVehicle.text = vehicles.vehicleName;
-        detailPlotEditVehicle.text = vehicles.vehicleName;
-    }
-    
     private void GetVehicleDropdown(TMP_Dropdown dropdown, List<string> vehicleNames)
     {
         dropdown.AddOptions(vehicleNames);
@@ -156,7 +124,7 @@ public class VehicleRoleController : MonoBehaviour
 
 [Serializable]
 
-public class HeavyEquipmentRole
+public class RatingParameter
 {
     public string vehicleName, consoleName;
 }

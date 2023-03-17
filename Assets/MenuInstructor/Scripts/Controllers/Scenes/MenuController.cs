@@ -14,10 +14,10 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject panelMainMenu;
     [SerializeField] private GameObject panelScenarioList, panelAddScenario, panelEditScenario;
     [SerializeField] private GameObject panelAddDamagePoint, panelEditDamagePoint;
+    [SerializeField] private GameObject panelAddRatingParameter, panelEditRatingParameter;
+    [SerializeField] private GameObject panelAddDetailParameter, panelEditDetailParameter;
     [SerializeField] private GameObject panelAddVehicleRole, panelEditVehicleRole;
     [SerializeField] private GameObject panelAddPlotLocation, panelEditPlotLocation;
-    [SerializeField] private GameObject panelAddPlotLocation1, panelAddPlotLocation2, panelAddPlotLocation3, panelAddPlotLocation4, panelAddPlotLocation5;
-    [SerializeField] private GameObject panelEditPlotLocation1, panelEditPlotLocation2, panelEditPlotLocation3, panelEditPlotLocation4, panelEditPlotLocation5;
     [SerializeField] private GameObject panelHeavyEquipment;
     [SerializeField] private GameObject panelConsoleSetting;
 
@@ -76,6 +76,7 @@ public class MenuController : MonoBehaviour
     public void backAddScenario()
     {
         panelAddVehicleRole.SetActive(false);
+        panelAddRatingParameter.SetActive(false);
         panelAddDamagePoint.SetActive(false);
         panelAddScenario.SetActive(true);
     }
@@ -84,6 +85,24 @@ public class MenuController : MonoBehaviour
     {
         panelAddDamagePoint.SetActive(true);
         panelAddScenario.SetActive(false);
+    }
+
+    public void showAddRatingParameter()
+    {
+        panelAddRatingParameter.SetActive(true);
+        panelAddScenario.SetActive(false);
+    }
+
+    public void backAddRatingParameter()
+    {
+        panelAddDetailParameter.SetActive(false);
+        panelAddRatingParameter.SetActive(true);
+    }
+
+    public void showAddDetailRatingParameter()
+    {
+        panelAddDetailParameter.SetActive(true);
+        panelAddRatingParameter.SetActive(false);
     }
 
     public void showAddVehicleRole()
@@ -126,6 +145,7 @@ public class MenuController : MonoBehaviour
     public void backEditScenario()
     {
         panelEditVehicleRole.SetActive(false);
+        panelEditRatingParameter.SetActive(false);
         panelEditDamagePoint.SetActive(false);
         panelEditScenario.SetActive(true);
     }
@@ -134,6 +154,24 @@ public class MenuController : MonoBehaviour
     {
         panelEditDamagePoint.SetActive(true);
         panelEditScenario.SetActive(false);
+    }
+
+    public void showEditRatingParameter()
+    {
+        panelEditRatingParameter.SetActive(true);
+        panelEditScenario.SetActive(false);
+    }
+
+    public void backEditRatingParameter()
+    {
+        panelEditDetailParameter.SetActive(false);
+        panelEditRatingParameter.SetActive(true);
+    }
+
+    public void showEditDetailRatingParameter()
+    {
+        panelEditDetailParameter.SetActive(true);
+        panelEditRatingParameter.SetActive(false);
     }
 
     public void showEditVehicleRole()

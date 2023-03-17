@@ -60,6 +60,7 @@ public class ConsoleController : MonoBehaviour
     {
         consoles = ConsoleInfo.FromJson(json);
         VehicleRoleController.instance.getConsoles = consoles;
+        ParameterController.instance.getConsoles = consoles;
 
         for (int i = 0; i < consoles.Count; i++)
         {
