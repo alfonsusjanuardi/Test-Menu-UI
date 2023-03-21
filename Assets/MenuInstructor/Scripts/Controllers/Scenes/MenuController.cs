@@ -11,18 +11,22 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject btnScenarioList;
     [SerializeField] private GameObject btnHeavyEquipment;
     [SerializeField] private GameObject btnConsoleSetting;
-    [SerializeField] private GameObject panelMainMenu;
+    [SerializeField] private GameObject panelMainMenu, panelHome;
     [SerializeField] private GameObject panelScenarioList, panelAddScenario, panelEditScenario;
     [SerializeField] private GameObject panelAddDamagePoint, panelEditDamagePoint;
     [SerializeField] private GameObject panelAddRatingParameter, panelEditRatingParameter;
     [SerializeField] private GameObject panelAddDetailParameter, panelEditDetailParameter;
     [SerializeField] private GameObject panelAddVehicleRole, panelEditVehicleRole;
     [SerializeField] private GameObject panelAddPlotLocation, panelEditPlotLocation;
+    [SerializeField] private GameObject panelDetailPlotLocation, panelDetailObstaclePlotLocation;
     [SerializeField] private GameObject panelHeavyEquipment;
     [SerializeField] private GameObject panelConsoleSetting;
 
     //button
-    [SerializeField] private GameObject btnBackHomeScenario, btnBackHomeHeavyEquipment, btnBackHomeConsoleSetting;
+    [SerializeField] private GameObject btnBackHomeScenario, btnBackHomeHeavyEquipment, btnBackHomeConsoleSetting, btnBackPlotLocation, btnBackEditPlotLocation, btnBackObstaclePlotLocation, btnBackEditObstaclePlotLocation;
+
+    //camera 
+    [SerializeField] private GameObject mainCamera, airportCamera;
     
     private void Awake() {
         if (instance == null)
@@ -87,6 +91,29 @@ public class MenuController : MonoBehaviour
         panelAddScenario.SetActive(false);
     }
 
+    public void showDetailObstaclePlotLocation()
+    {
+        panelDetailObstaclePlotLocation.SetActive(true);
+        panelAddDamagePoint.SetActive(false);
+        panelHome.SetActive(false);
+        btnBackEditObstaclePlotLocation.SetActive(false);
+        btnBackObstaclePlotLocation.SetActive(true);
+        airportCamera.SetActive(true);
+        mainCamera.SetActive(false);
+    }
+
+    public void backAddDamagePoint()
+    {
+        panelAddDamagePoint.SetActive(true);
+        panelDetailObstaclePlotLocation.SetActive(false);
+        panelMainMenu.SetActive(false);
+        panelHome.SetActive(true);
+        btnBackEditObstaclePlotLocation.SetActive(false);
+        btnBackObstaclePlotLocation.SetActive(false);
+        airportCamera.SetActive(false);
+        mainCamera.SetActive(true);
+    }
+
     public void showAddRatingParameter()
     {
         panelAddRatingParameter.SetActive(true);
@@ -128,6 +155,29 @@ public class MenuController : MonoBehaviour
         panelAddVehicleRole.SetActive(false);
     }
 
+    public void showDetailPlotLocation()
+    {
+        panelDetailPlotLocation.SetActive(true);
+        panelAddPlotLocation.SetActive(false);
+        panelHome.SetActive(false);
+        btnBackEditPlotLocation.SetActive(false);
+        btnBackPlotLocation.SetActive(true);
+        airportCamera.SetActive(true);
+        mainCamera.SetActive(false);
+    }
+
+    public void backAddPlotLocation()
+    {
+        panelAddPlotLocation.SetActive(true);
+        panelDetailPlotLocation.SetActive(false);
+        panelMainMenu.SetActive(false);
+        panelHome.SetActive(true);
+        btnBackEditPlotLocation.SetActive(false);
+        btnBackPlotLocation.SetActive(false);
+        airportCamera.SetActive(false);
+        mainCamera.SetActive(true);
+    }
+
     public void showEditScenario()
     {
         panelEditScenario.SetActive(true);
@@ -154,6 +204,38 @@ public class MenuController : MonoBehaviour
     {
         panelEditDamagePoint.SetActive(true);
         panelEditScenario.SetActive(false);
+    }
+
+    public void showDetailEditObstaclePlotLocation()
+    {
+        panelEditDamagePoint.SetActive(false);
+        panelDetailObstaclePlotLocation.SetActive(true);
+        panelHome.SetActive(false);
+        btnBackEditObstaclePlotLocation.SetActive(true);
+        btnBackObstaclePlotLocation.SetActive(false);
+        airportCamera.SetActive(true);
+        mainCamera.SetActive(false);
+
+        SpawnObstacleController.instance.LoadObstacles();
+    }
+
+    public void backEditDamagePoint()
+    {
+        panelEditDamagePoint.SetActive(true);
+        panelDetailObstaclePlotLocation.SetActive(false);
+        panelMainMenu.SetActive(false);
+        panelHome.SetActive(true);
+        btnBackEditObstaclePlotLocation.SetActive(false);
+        btnBackObstaclePlotLocation.SetActive(false);
+        airportCamera.SetActive(false);
+        mainCamera.SetActive(true);
+
+        for (int i = 0; i < SpawnObstacleController.instance.spawnObstacles.Count; i++)
+        {
+            Destroy(SpawnObstacleController.instance.spawnObstacles[i].obsPloting);
+        }
+
+        SpawnObstacleController.instance.spawnObstacles.Clear();
     }
 
     public void showEditRatingParameter()
@@ -190,6 +272,38 @@ public class MenuController : MonoBehaviour
     {
         panelEditPlotLocation.SetActive(true);
         panelEditVehicleRole.SetActive(false);
+    }
+
+    public void showDetailEditPlotLocation()
+    {
+        panelDetailPlotLocation.SetActive(true);
+        panelEditPlotLocation.SetActive(false);
+        panelHome.SetActive(false);
+        btnBackEditPlotLocation.SetActive(true);
+        btnBackPlotLocation.SetActive(false);
+        airportCamera.SetActive(true);
+        mainCamera.SetActive(false);
+
+        SpawnVehicleController.instance.LoadVehicles();
+    }
+
+    public void backEditPlotLocation()
+    {
+        panelEditPlotLocation.SetActive(true);
+        panelDetailPlotLocation.SetActive(false);
+        panelMainMenu.SetActive(false);
+        panelHome.SetActive(true);
+        btnBackEditPlotLocation.SetActive(false);
+        btnBackPlotLocation.SetActive(false);
+        airportCamera.SetActive(false);
+        mainCamera.SetActive(true);
+
+        for (int i = 0; i < SpawnVehicleController.instance.spawnVehicles.Count; i++)
+        {
+            Destroy(SpawnVehicleController.instance.spawnVehicles[i].obsPloting);
+        }
+        
+        SpawnVehicleController.instance.spawnVehicles.Clear();
     }
 
     public void backScenarioList()

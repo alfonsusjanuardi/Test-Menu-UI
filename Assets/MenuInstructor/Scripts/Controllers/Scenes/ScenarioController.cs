@@ -1,5 +1,7 @@
 using System;
 using System.Data;
+using System.Net;
+using System.Net.Sockets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +24,7 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scenarioName;
     [SerializeField] private TMP_InputField taskName, time, location, information;
     [SerializeField] private TextMeshProUGUI addLocation, editLocation;
+    public TextMeshProUGUI idScenario;
     [SerializeField] private TMP_InputField addScenarioName, addTaskName, addTime, addInformation;
     [SerializeField] private TMP_InputField editScenarioName, editTaskName, editTime, editInformation;
     [SerializeField] private GameObject canvasPanel;
@@ -51,6 +54,7 @@ public class ScenarioController : MonoBehaviour
 
     private void LoadDataScenario()
     {
+        SpawnObstacleController.instance.getScenarios = listScen;
         foreach (Transform trans in parentTransform)
         {
             Destroy(trans.gameObject);
@@ -60,6 +64,7 @@ public class ScenarioController : MonoBehaviour
         {
             var copy = Instantiate(btn, parentTransform);
             var meta = copy.GetComponent<Metadata>();
+            var id = listScen[i].id_scenario;
             var nama = listScen[i].scenario_name;
             var taskName = listScen[i].task_name;
             var time = listScen[i].time;
@@ -69,6 +74,7 @@ public class ScenarioController : MonoBehaviour
             string scenarioName = listScen[i].scenario_name;
 
             var scenario = new ListScenario(){
+                id_scenario = id,
                 scenario_name = nama,
                 task_name = taskName,
                 time = time,
@@ -100,6 +106,7 @@ public class ScenarioController : MonoBehaviour
         editTime.text = sInfo.time;
         editLocation.text = sInfo.location;
         editInformation.text = sInfo.information;
+        idScenario.text = sInfo.id_scenario.ToString();
     }
 
     private void ConnectionDBScenario()
@@ -108,6 +115,7 @@ public class ScenarioController : MonoBehaviour
         IDataReader reader = DBConn.getData(sql);
 
         while (reader.Read()) {
+            int id_scenario = reader.GetInt16(0);
             scenarioName.text = (string) reader["scenario_name"];
             taskName.text = (string) reader["task_name"];
             time.text = (string) reader["time"];
@@ -115,6 +123,7 @@ public class ScenarioController : MonoBehaviour
             information.text = (string) reader["information"];
 
             listScen.Add(new ListScenario(){
+                id_scenario = id_scenario,
                 scenario_name = scenarioName.text,
                 task_name = taskName.text,
                 time = time.text,
@@ -124,6 +133,26 @@ public class ScenarioController : MonoBehaviour
         }
         
         DBConn.CloseConnection();
+    }
+
+    private string GetLocalComputerName()
+    {
+        string host = Dns.GetHostName();
+        return host;
+        throw new System.Exception("Can't get host name!");
+    }
+
+    private string GetLocalIPAddress()
+    {
+        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+        throw new System.Exception("No network adapters with an IPv4 address in the system!");
     }
 
     public void addScenario()
@@ -138,6 +167,14 @@ public class ScenarioController : MonoBehaviour
         };
         listScen.Add(scenario);
         SetData(scenario);
+        SpawnObstacleController.instance.AddSpawnObstacles();
+
+        for (int i = 0; i < SpawnObstacleController.instance.spawnObstacles.Count; i++)
+        {
+            Destroy(SpawnObstacleController.instance.spawnObstacles[i].obsPloting);
+        }
+        SpawnObstacleController.instance.spawnObstacles.Clear();
+
         LoadDataScenario();
     }
 
@@ -210,5 +247,6 @@ public class ScenarioController : MonoBehaviour
 [Serializable]
 public class ListScenario
 {
+    public int id_scenario;
     public string scenario_name, task_name, time, location, information;
 }
