@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Local",
+    "host": "127.0.0.1",
+    "port": 9933,
+    "zone": "HeavyVehicle"
+  },
+  {
+    "name": "Izzan PC",
+    "host": "192.168.0.75",
+    "port": 9933,
+    "zone": "HeavyVehicle"
+  }
+]

@@ -6,13 +6,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Sfs2X;
+using Sfs2X.Core;
+using Sfs2X.Requests;
+using Sfs2X.Util;
+using Sfs2X.Entities;
+using Sfs2X.Entities.Variables;
+
 using TMPro;
 using UnityEngine.UI;
 using Meta.Data;
 
-public class ScenarioController : MonoBehaviour
+public class ScenarioController : BaseSceneController
 {
     public static ScenarioController instance;
+
+    [Header("Custom ID")]
+    [Space(5)]
+    [SerializeField] private int customID;
+    [SerializeField] private bool useCustomID;
 
     [Header("UI GameObject")]
     [Space(5)]
@@ -28,12 +40,17 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] private TMP_InputField addScenarioName, addTaskName, addTime, addInformation;
     [SerializeField] private TMP_InputField editScenarioName, editTaskName, editTime, editInformation;
     [SerializeField] private GameObject canvasPanel;
+
+    [Header("Smartfox")]
+    [Space(5)]
+    [SerializeField] private bool debug;
+    private SmartFox sfs;
     
     [SerializeField] private NetworkController DBConn;
     public List<ListScenario> listScen = new();
     private string sql;
 
-    private void Awake() {
+    private void OnEnable() {
         if (instance == null)
             instance = this;
         else
@@ -52,9 +69,142 @@ public class ScenarioController : MonoBehaviour
         
     }
 
+    public void OnPlayButtonClick()
+    {
+        gm.gamePlay = (GlobalManager.GamePlay)2;
+        Connect();
+    }
+
+    private void EnableUI(bool enable)
+    {
+
+    }
+    
+
+    private void Connect()
+    {
+        // EnableUI(false);
+
+        //Get Current Network
+        // NetworkServices currentNetwork = NetworkServiceController.instance.GetServices(1);
+
+        ConfigData cfg = new()
+        {
+            Host = "192.168.0.73",
+            Port = 9933,
+            Zone = "HeavyVehicle",
+            Debug = debug
+        };
+
+        // Initialize SmartFox client
+		// The singleton class GlobalManager holds a reference to the SmartFox class instance,
+		// so that it can be shared among all the scenes
+		sfs = gm.CreateSfsClient();
+
+        // Configure SmartFox internal logger
+        sfs.Logger.EnableConsoleTrace = debug;
+
+        // Add Event Listeners
+        AddSmartFoxListeners();
+
+        // Connect to SmartFoxServer
+        sfs.Connect(cfg);
+    }
+
+    private void AddSmartFoxListeners()
+    {
+        sfs.AddEventListener(SFSEvent.CONNECTION, OnConnection);
+        sfs.AddEventListener(SFSEvent.CONNECTION_LOST, OnConnectionLost);
+        sfs.AddEventListener(SFSEvent.LOGIN, OnLogin);
+        sfs.AddEventListener(SFSEvent.LOGIN_ERROR, OnLoginError);
+        sfs.AddEventListener(SFSEvent.USER_VARIABLES_UPDATE, OnUserVarsUpdate);
+        sfs.AddEventListener(SFSEvent.UDP_INIT, OnUdpInit);
+    }
+
+    protected override void RemoveSmartFoxListeners()
+    {
+        if (sfs != null)
+        {
+            sfs.RemoveEventListener(SFSEvent.CONNECTION, OnConnection);
+            sfs.RemoveEventListener(SFSEvent.CONNECTION_LOST, OnConnectionLost);
+            sfs.RemoveEventListener(SFSEvent.LOGIN, OnLogin);
+            sfs.RemoveEventListener(SFSEvent.LOGIN_ERROR, OnLoginError);
+            sfs.RemoveEventListener(SFSEvent.USER_VARIABLES_UPDATE, OnUserVarsUpdate);
+            sfs.RemoveEventListener(SFSEvent.UDP_INIT, OnUdpInit);
+        }
+    }
+
+    private void OnConnection(BaseEvent evt)
+    {
+        // Check if the conenction was established or not
+        if ((bool)evt.Params["success"]) {
+            Debug.Log("SFS2X API version: " + sfs.Version);
+            Debug.Log("Connection mode is: " + sfs.ConnectionMode);
+            sfs.Send(new LoginRequest(""));
+        } else {
+            Debug.Log("Connection failed; is the server running at all?");
+        }
+    }
+
+    private void OnConnectionLost(BaseEvent evt)
+    {
+        // Remove SFS listeners
+        RemoveSmartFoxListeners();
+
+        // Show error message
+        string reason = (string)evt.Params["reason"];
+
+        if (reason != ClientDisconnectionReason.MANUAL)
+            Debug.Log("Connection lost, reason is: " + reason);
+    }
+
+    private void OnLogin(BaseEvent evt)
+    {
+        if (useCustomID)
+        {
+            List<UserVariable> userVars = new() { new SFSUserVariable("id", customID) };
+            sfs.Send(new SetUserVariablesRequest(userVars));
+        }
+
+        // Initialize UDP communication
+        sfs.InitUDP();
+    }
+
+    private void OnLoginError(BaseEvent evt)
+    {
+        // Disconnect
+        // NOTE: this causes a CONNECTION_LOST event with reason "manual", which in turn removes all SFS listeners
+        sfs.Disconnect();
+
+        Debug.Log("Login failed due to the following error:\n" + (string)evt.Params["errorMessage"]);
+    }
+
+    private void OnUserVarsUpdate(BaseEvent evt)
+    {
+        // Get the user that changed his variables
+        User user = (User)evt.Params["user"];
+        
+        Debug.Log(user + " Vars Updated");
+    }
+
+    private void OnUdpInit(BaseEvent evt)
+    {
+        if ((bool)evt.Params["success"]) {
+            // Load lobby scene
+            Debug.Log("success");
+        } else {
+            // Disconnect
+            // NOTE: this causes a CONNECTION_LOST event with reason "manual", which in turn removes all SFS listeners
+            sfs.Disconnect();
+
+            Debug.Log("UDP initialization failed due to the following error:\n" + (string)evt.Params["errorMessage"]);
+        }
+    }
+
     private void LoadDataScenario()
     {
         SpawnObstacleController.instance.getScenarios = listScen;
+        SpawnVehicleController.instance.getScenarios = listScen;
         foreach (Transform trans in parentTransform)
         {
             Destroy(trans.gameObject);

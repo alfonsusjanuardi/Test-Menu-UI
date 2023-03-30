@@ -12,7 +12,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject btnHeavyEquipment;
     [SerializeField] private GameObject btnConsoleSetting;
     [SerializeField] private GameObject panelMainMenu, panelHome;
-    [SerializeField] private GameObject panelScenarioList, panelAddScenario, panelEditScenario;
+    [SerializeField] private GameObject panelScenarioList, panelAddScenario, panelEditScenario, panelRunScenario;
     [SerializeField] private GameObject panelAddDamagePoint, panelEditDamagePoint;
     [SerializeField] private GameObject panelAddRatingParameter, panelEditRatingParameter;
     [SerializeField] private GameObject panelAddDetailParameter, panelEditDetailParameter;
@@ -26,7 +26,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject btnBackHomeScenario, btnBackHomeHeavyEquipment, btnBackHomeConsoleSetting, btnBackPlotLocation, btnBackEditPlotLocation, btnBackObstaclePlotLocation, btnBackEditObstaclePlotLocation;
 
     //camera 
-    [SerializeField] private GameObject mainCamera, airportCamera;
+    [SerializeField] private GameObject mainCamera, airportCamera, frontCamera, backCamera, rightCamera, leftCamera;
     
     private void Awake() {
         if (instance == null)
@@ -56,6 +56,26 @@ public class MenuController : MonoBehaviour
         panelScenarioList.SetActive(false);
         panelHeavyEquipment.SetActive(false);
         panelConsoleSetting.SetActive(false);
+    }
+
+    //sementara
+    public void runScenario()
+    {
+        ScenarioController.instance.OnPlayButtonClick();
+        panelRunScenario.SetActive(true);
+        panelScenarioList.SetActive(false);
+        panelHome.SetActive(false);
+        airportCamera.SetActive(true);
+        mainCamera.SetActive(false);
+    }
+
+    public void backFromRunScenario()
+    {
+        panelScenarioList.SetActive(true);
+        panelHome.SetActive(true);
+        panelRunScenario.SetActive(false);
+        mainCamera.SetActive(true);
+        airportCamera.SetActive(false);
     }
 
     public void showScenarioList()
@@ -100,6 +120,8 @@ public class MenuController : MonoBehaviour
         btnBackObstaclePlotLocation.SetActive(true);
         airportCamera.SetActive(true);
         mainCamera.SetActive(false);
+
+        SpawnObstacleController.instance.isActive = true;
     }
 
     public void backAddDamagePoint()
@@ -112,6 +134,8 @@ public class MenuController : MonoBehaviour
         btnBackObstaclePlotLocation.SetActive(false);
         airportCamera.SetActive(false);
         mainCamera.SetActive(true);
+
+        SpawnObstacleController.instance.isActive = false;
     }
 
     public void showAddRatingParameter()
@@ -164,6 +188,8 @@ public class MenuController : MonoBehaviour
         btnBackPlotLocation.SetActive(true);
         airportCamera.SetActive(true);
         mainCamera.SetActive(false);
+
+        SpawnVehicleController.instance.isActive = true;
     }
 
     public void backAddPlotLocation()
@@ -176,6 +202,8 @@ public class MenuController : MonoBehaviour
         btnBackPlotLocation.SetActive(false);
         airportCamera.SetActive(false);
         mainCamera.SetActive(true);
+
+        SpawnVehicleController.instance.isActive = false;
     }
 
     public void showEditScenario()
@@ -217,6 +245,7 @@ public class MenuController : MonoBehaviour
         mainCamera.SetActive(false);
 
         SpawnObstacleController.instance.LoadObstacles();
+        SpawnObstacleController.instance.isActive = true;
     }
 
     public void backEditDamagePoint()
@@ -236,6 +265,7 @@ public class MenuController : MonoBehaviour
         }
 
         SpawnObstacleController.instance.spawnObstacles.Clear();
+        SpawnObstacleController.instance.isActive = false;
     }
 
     public void showEditRatingParameter()
@@ -285,6 +315,7 @@ public class MenuController : MonoBehaviour
         mainCamera.SetActive(false);
 
         SpawnVehicleController.instance.LoadVehicles();
+        SpawnVehicleController.instance.isActive = true;
     }
 
     public void backEditPlotLocation()
@@ -304,6 +335,7 @@ public class MenuController : MonoBehaviour
         }
         
         SpawnVehicleController.instance.spawnVehicles.Clear();
+        SpawnVehicleController.instance.isActive = false;
     }
 
     public void backScenarioList()

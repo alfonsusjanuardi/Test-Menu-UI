@@ -16,6 +16,7 @@ public class VehicleRoleController : MonoBehaviour
     [Header("UI")]
     [Space(5)]
     [SerializeField] private TextMeshProUGUI detailPlotAddVehicle, detailPlotEditVehicle;
+    public TextMeshProUGUI detailPlotVehicle;
 
     [Header("List")]
     [Space(5)]
@@ -146,6 +147,7 @@ public class VehicleRoleController : MonoBehaviour
     {
         detailPlotAddVehicle.text = vehicles.vehicleName;
         detailPlotEditVehicle.text = vehicles.vehicleName;
+        detailPlotVehicle.text = vehicles.vehicleName;
     }
     
     private void GetVehicleDropdown(TMP_Dropdown dropdown, List<string> vehicleNames)

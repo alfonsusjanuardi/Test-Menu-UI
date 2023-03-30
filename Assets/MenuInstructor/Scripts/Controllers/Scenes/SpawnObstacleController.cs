@@ -24,6 +24,8 @@ public class SpawnObstacleController : MonoBehaviour
     public List<loadSpawnObstacles> spawnObstacles = new();
     public List<ListScenario> getScenarios;
 
+    public bool isActive;
+
     private void Awake() {
         if(instance == null)
             instance = this;
@@ -34,13 +36,14 @@ public class SpawnObstacleController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      
+      SpawnVehicleController.instance.isActive = isActive;
     }
 
     // Update is called once per frame
     void Update()
     {
-        SpawnObstacleAtMousePos();
+        if(isActive)
+            SpawnObstacleAtMousePos();
     }
 
     private void ConnectionDBObscatlePlot()
