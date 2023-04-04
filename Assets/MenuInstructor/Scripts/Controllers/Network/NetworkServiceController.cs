@@ -209,6 +209,15 @@ public class NetworkServiceController : MonoBehaviour
         }
 
         NetworkServices newService = services.Find(x => x == service);
+        newService.name = networkNameInput.text;
+        newService.host = hostInput.text;
+        newService.port = int.Parse(portInput.text);
+        newService.zone = zoneInput.text;
+
+        serviceObjectMeta.FindParamComponent<TextMeshProUGUI>("Name").text = newService.name;
+        serviceObjectMeta.FindParamComponent<TextMeshProUGUI>("Host").text = newService.host;
+        serviceObjectMeta.FindParamComponent<TextMeshProUGUI>("Port").text = newService.port.ToString();
+        serviceObjectMeta.FindParamComponent<TextMeshProUGUI>("Zone").text = newService.zone;
 
         ReadWriteFile.WriteTextFilePersistent(NetworkServices.ToString(services), "NetworkSettings.json");
 
