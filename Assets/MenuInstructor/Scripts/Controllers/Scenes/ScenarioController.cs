@@ -40,6 +40,7 @@ public class ScenarioController : BaseSceneController
     [SerializeField] private TMP_InputField addScenarioName, addTaskName, addTime, addInformation;
     [SerializeField] private TMP_InputField editScenarioName, editTaskName, editTime, editInformation;
     [SerializeField] private GameObject canvasPanel;
+    [SerializeField] private TMP_Dropdown networkDropdown;
 
     [Header("Smartfox")]
     [Space(5)]
@@ -86,13 +87,13 @@ public class ScenarioController : BaseSceneController
         // EnableUI(false);
 
         //Get Current Network
-        // NetworkServices currentNetwork = NetworkServiceController.instance.GetServices(1);
+        NetworkServices currentNetwork = NetworkServiceController.instance.GetServices(networkDropdown.value);
 
         ConfigData cfg = new()
         {
-            Host = "192.168.0.73",
-            Port = 9933,
-            Zone = "HeavyVehicle",
+            Host = currentNetwork.host,
+            Port = currentNetwork.port,
+            Zone = currentNetwork.zone,
             Debug = debug
         };
 

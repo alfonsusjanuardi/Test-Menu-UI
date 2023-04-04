@@ -33,6 +33,7 @@ public class GlobalManager : MonoBehaviour
         Multiplayer = 2
     }
 
+    [Header("GamePlay")]
     public GamePlay gamePlay = GamePlay.SinglePlayer;
 
     private SmartFox sfs;

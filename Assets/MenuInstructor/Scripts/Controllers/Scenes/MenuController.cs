@@ -12,7 +12,9 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject btnHeavyEquipment;
     [SerializeField] private GameObject btnConsoleSetting;
     [SerializeField] private GameObject panelMainMenu, panelHome;
-    [SerializeField] private GameObject panelScenarioList, panelAddScenario, panelEditScenario, panelRunScenario;
+    public GameObject panelScenarioList;
+    [SerializeField] private GameObject panelAddScenario, panelEditScenario, panelRunScenario;
+    [SerializeField] private GameObject panelModeRunScenario;
     [SerializeField] private GameObject panelAddDamagePoint, panelEditDamagePoint;
     [SerializeField] private GameObject panelAddRatingParameter, panelEditRatingParameter;
     [SerializeField] private GameObject panelAddDetailParameter, panelEditDetailParameter;
@@ -61,17 +63,30 @@ public class MenuController : MonoBehaviour
     //sementara
     public void runScenario()
     {
-        ScenarioController.instance.OnPlayButtonClick();
-        panelRunScenario.SetActive(true);
+        panelModeRunScenario.SetActive(true);
         panelScenarioList.SetActive(false);
-        panelHome.SetActive(false);
-        airportCamera.SetActive(true);
-        mainCamera.SetActive(false);
     }
 
     public void backFromRunScenario()
     {
         panelScenarioList.SetActive(true);
+        panelHome.SetActive(true);
+        panelModeRunScenario.SetActive(false);
+    }
+
+    public void playModeScenario()
+    {
+        ScenarioController.instance.OnPlayButtonClick();
+        panelRunScenario.SetActive(true);
+        panelModeRunScenario.SetActive(false);
+        panelHome.SetActive(false);
+        airportCamera.SetActive(true);
+        mainCamera.SetActive(false);
+    }
+
+    public void backFromPlayScenario()
+    {
+        panelModeRunScenario.SetActive(true);
         panelHome.SetActive(true);
         panelRunScenario.SetActive(false);
         mainCamera.SetActive(true);
