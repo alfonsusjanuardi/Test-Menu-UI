@@ -358,6 +358,18 @@ public class MenuController : MonoBehaviour
         panelScenarioList.SetActive(true);
         panelAddScenario.SetActive(false);
         panelEditScenario.SetActive(false);
+
+        for (int i = 0; i < SpawnObstacleController.instance.spawnObstacles.Count; i++)
+        {
+            Destroy(SpawnObstacleController.instance.spawnObstacles[i].obsPloting);
+        }
+        SpawnObstacleController.instance.spawnObstacles.Clear();
+
+        for (int i = 0; i < SpawnVehicleController.instance.spawnVehicles.Count; i++)
+        {
+            Destroy(SpawnVehicleController.instance.spawnVehicles[i].obsPloting);
+        }
+        SpawnVehicleController.instance.spawnVehicles.Clear();
     }
 
     public void showHeavyEquipment()
